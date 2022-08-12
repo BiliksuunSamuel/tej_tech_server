@@ -1,8 +1,7 @@
 import moment from "moment";
-import { IUser } from "./../interface/IModel";
 import { INewUserInfo } from "./../params/index";
 
-export function formatUserInfo(info: INewUserInfo): IUser {
+export function formatUserInfo(info: INewUserInfo) {
   return {
     ...info,
     followers: [],

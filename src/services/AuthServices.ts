@@ -13,6 +13,19 @@ export function GetAuthById(id: string) {
   });
 }
 
+export function GetAuthInfoByUserId(id: string) {
+  return new Promise(function (resolve, reject) {
+    try {
+      AuthModel.findOne({ userId: id }, (error, results) => {
+        error && reject(error);
+        resolve(results);
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
 export function AddAuthInfo(info: any) {
   return new Promise(function (resolve, reject) {
     try {

@@ -1,18 +1,17 @@
 import { Request, Response } from "express";
-import { INewUserInfo } from "../../params";
+import { IUserData } from "../../interface/IModel";
 import { AddAuthInfo } from "../../services/AuthServices";
 import {
   AddUser,
   GetUserByEmail,
   GetUserByPhone,
 } from "../../services/UserServices";
-import { formatUserInfo } from "../../utilities";
 import HandleErrors from "../../utilities/HandleErrors";
 import { hashPassword } from "../../utilities/HandlePassword";
 
 export default async function (req: Request, res: Response) {
   try {
-    const data = <INewUserInfo>req.body;
+    const data = <IUserData>req.body;
     const phoneUser = await GetUserByPhone(data.phone);
     if (phoneUser) {
       HandleErrors(res, "Phone Number Already Registered");
@@ -21,13 +20,11 @@ export default async function (req: Request, res: Response) {
       if (emailUser) {
         HandleErrors(res, "Email Address Already Registered");
       } else {
-        const authInfo: any = await AddAuthInfo({
+        const Info: any = await AddUser(data);
+        await AddAuthInfo({
           password: await hashPassword(data.password),
+          userId: Info._id,
         });
-        const userInfo = formatUserInfo(data);
-        userInfo.authId = authInfo?._id;
-        const Info = await AddUser(userInfo);
-        console.log(Info);
         res.send("Account Created Successfully");
       }
     }

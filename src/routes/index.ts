@@ -7,4 +7,5 @@ export enum PostRoutes {
 
 export enum GetRoutes {
   categoriesGet = "/api/categories/get",
+  getProducts = "/api/products/get",
 }
